@@ -1,0 +1,27 @@
+{
+  "name": "appointment_management_system",
+  "version": "1.0.0",
+  "description": "1. Doctor can have many patients appointments\r 2. Doctor can cancle the Patients appointments\r 3. Patient can schedule multiple appointments based on the slot timings available\r 4. Doctor can blacklist the patients and after that the patient can't find the doctor\r 5. Notification needs to be sent to both the patient and doctor every time the appointment is booked or cancled\r 6. Doctor can download the file containing the name , time of the bookings slot of that patient",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nimapdevyash/Appointment_Management_System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nimapdevyash/Appointment_Management_System/issues"
+  },
+  "homepage": "https://github.com/nimapdevyash/Appointment_Management_System#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.3",
+    "sequelize": "^6.37.6"
+  }
+}

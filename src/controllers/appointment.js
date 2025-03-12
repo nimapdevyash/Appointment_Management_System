@@ -1,4 +1,4 @@
-const { Patient, Doctor } = require("../modules");
+const { Patient, Doctor, Appointments } = require("../modules");
 const BlockedPatients = require("../modules/blockedPatients");
 
 async function getAppointment(req, res) {
@@ -110,7 +110,7 @@ async function deleteAppointment(req, res) {
 
     if (!doctor || !appointment) {
       return res.status(404).json({
-        message: "invalid doctor id",
+        message: "invalid credentials",
       });
     }
 

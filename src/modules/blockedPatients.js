@@ -1,12 +1,24 @@
 const { sequelize } = require("../database/connect");
 const { DataTypes } = require("sequelize");
 
-const blockedPatient = sequelize.define("blockedPatient", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+const BlockedPatients = sequelize.define(
+  "BlockedPatients",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    doctorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    patientId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
-});
+  { indexes: [] }
+);
 
-module.exports = blockedPatient;
+module.exports = BlockedPatients;

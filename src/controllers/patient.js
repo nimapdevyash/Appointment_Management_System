@@ -1,4 +1,4 @@
-const { Appointments, Patient, Doctor } = require("../modules");
+const { Patient } = require("../modules");
 
 async function createPatient(req, res) {
   try {
@@ -61,53 +61,31 @@ async function getPatient(req, res) {
   }
 }
 
-async function addAppointment(req, res) {
+async function deletePatient(req, res) {
   try {
-    const { patientId, doctorId } = req.body;
+    const { patientId } = req.body;
 
-    console.log(patientId, doctorId);
-
-    if (!patientId || !doctorId) {
+    if (!patientId) {
       return res.status(404).json({
-        message: "all feilds are required",
+        Message: "patientId is required",
       });
     }
 
     const patient = await Patient.findByPk(patientId);
-    const doctor = await Doctor.findByPk(doctorId);
 
-    if (!patient || !doctor) {
-      return res.status(404).json({
-        message: "invalid credentials",
+    if (!patient) {
+      return res.status(500).json({
+        message: "invalid patientId",
       });
     }
 
-    let appointmentsOftheDay = await Appointments.count({
-      where: {
-        doctorId,
-      },
-    });
-
-    console.log("count : ", appointmentsOftheDay);
-
-    if (appointmentsOftheDay >= 7) {
-      return res.status(400).json({
-        message: "appointments are full for the day",
-      });
-    }
-
-    const appointment = await Appointments.create({
-      doctorId,
-      patientId,
-    });
+    await patient.destroy();
 
     return res.status(200).json({
-      message: "appointment is added successfully",
-      data: appointment,
+      message: "patient deleted successfully",
     });
   } catch (error) {
-    console.log("error while setting an appointment", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message,
     });
   }
@@ -116,5 +94,5 @@ async function addAppointment(req, res) {
 module.exports = {
   createPatient,
   getPatient,
-  addAppointment,
+  deletePatient,
 };

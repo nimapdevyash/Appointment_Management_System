@@ -1,4 +1,5 @@
 const Appointments = require("./appointments");
+const BlockedPatients = require("./blockedPatients");
 const Doctor = require("./doctor");
 const Patient = require("./patient");
 
@@ -17,9 +18,20 @@ Patient.belongsToMany(Doctor, {
   foreignKeyConstraint: false,
 });
 
-// doctor can block many patient
-Doctor.hasMany(Patient, { as: "blockedPatients", foreignKey: "blockedByID" });
-Patient.belongsTo(Doctor, { as: "BlockedByDoctor", foreignKey: "blockedByID" });
+// single patient can be blacked by many doctors and one doctor can black many patients
+Doctor.belongsToMany(Patient, {
+  through: BlockedPatients,
+  foreignKey: "doctorId",
+  constraints: false,
+  foreignKeyConstraint: false,
+});
+
+Patient.belongsToMany(Doctor, {
+  through: BlockedPatients,
+  foreignKey: "patientId",
+  constraints: false,
+  foreignKeyConstraint: false,
+});
 
 module.exports = {
   Doctor,

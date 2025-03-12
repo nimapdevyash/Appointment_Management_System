@@ -1,5 +1,7 @@
 const { Patient, Doctor, Appointments } = require("../modules");
 const BlockedPatients = require("../modules/blockedPatients");
+const fs = require("fs");
+const path = require("path");
 
 async function getAppointment(req, res) {
   try {
@@ -212,10 +214,57 @@ async function unBlockPatient(req, res) {
   }
 }
 
+async function fetchAllAppointments(req, res) {
+  try {
+    const { doctorId } = req.body;
+
+    if (!doctorId) {
+      return res.status(404).json({
+        message: "credentials required",
+      });
+    }
+
+    const doctor = Doctor.findByPk(doctorId);
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "invalid credentials",
+      });
+    }
+
+    const appointments = await Appointments.findAll({
+      where: { doctorId },
+    });
+
+    if (!appointments) {
+      return res.status(200).json({
+        message: "no appointments for today",
+      });
+    }
+
+    let filePath = path.resolve(__dirname, "../../public");
+    let fileName = Date.now().toString() + ".json";
+    let file = path.join(filePath, fileName);
+
+    const data = JSON.stringify(appointments);
+
+    fs.writeFileSync(file, data);
+
+    res.status(200).sendFile(file);
+
+    // fs.unlinkSync(file);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   getAppointment,
   deleteAppointment,
   createAppointment,
   blockPatient,
   unBlockPatient,
+  fetchAllAppointments,
 };

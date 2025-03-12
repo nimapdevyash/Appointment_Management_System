@@ -8,14 +8,12 @@ Doctor.belongsToMany(Patient, {
   through: Appointments,
   foreignKey: "doctorId",
   constraints: false,
-  foreignKeyConstraint: false,
 });
 
 Patient.belongsToMany(Doctor, {
   through: Appointments,
   foreignKey: "patientId",
   constraints: false,
-  foreignKeyConstraint: false,
 });
 
 // single patient can be blacked by many doctors and one doctor can black many patients
@@ -23,14 +21,12 @@ Doctor.belongsToMany(Patient, {
   through: BlockedPatients,
   foreignKey: "doctorId",
   constraints: false,
-  foreignKeyConstraint: false,
 });
 
 Patient.belongsToMany(Doctor, {
   through: BlockedPatients,
   foreignKey: "patientId",
   constraints: false,
-  foreignKeyConstraint: false,
 });
 
 module.exports = {

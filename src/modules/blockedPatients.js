@@ -7,14 +7,6 @@ const blockedPatient = sequelize.define("blockedPatient", {
     autoIncrement: true,
     primaryKey: true,
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  disease: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 });
 
 module.exports = blockedPatient;

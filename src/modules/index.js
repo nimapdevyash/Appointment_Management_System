@@ -16,6 +16,10 @@ Patient.belongsToMany(Doctor, {
   constraints: false,
 });
 
+// Explicitly define relationships to enable eager loading
+Appointments.belongsTo(Doctor, { foreignKey: "doctorId" });
+Appointments.belongsTo(Patient, { foreignKey: "patientId" });
+
 // single patient can be blacked by many doctors and one doctor can black many patients
 Doctor.belongsToMany(Patient, {
   through: BlockedPatients,

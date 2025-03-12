@@ -228,52 +228,64 @@ async function fetchAllAppointments(req, res) {
       return res.status(404).json({ message: "Invalid credentials" });
     }
 
-    const appointments = await Appointments.findAll({ where: { doctorId } });
+    // Fetch appointments with patient names
+    const appointments = await Appointments.findAll({
+      where: { doctorId },
+      include: [{ model: Patient, attributes: ["id", "name"] }],
+      attributes: ["createdAt"],
+    });
 
     if (!appointments || appointments.length === 0) {
       return res.status(200).json({ message: "No appointments for today" });
     }
 
-    // Define file path and name
-    const filePath = path.resolve(__dirname, "../../public");
-    const fileName = `appointments_${Date.now()}.xlsx`;
-    const file = path.join(filePath, fileName);
+    // Format response data
+    const formattedData = appointments.map((appt) => {
+      const appointmentDate = appt.createdAt.toISOString().split("T")[0]; // YYYY-MM-DD
+      const appointmentTime = appt.createdAt.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }); // HH:MM AM/PM
 
-    // Create a new Excel workbook
+      return {
+        patientName: appt.Patient ? appt.Patient.name : "Unknown",
+        appointmentDate,
+        appointmentTime,
+      };
+    });
+
+    // ** Step 1: Create an Excel Workbook **
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Appointments");
 
-    // Define columns
+    // ** Step 2: Define Column Headers **
     worksheet.columns = [
-      { header: "ID", key: "id", width: 10 },
-      { header: "Doctor ID", key: "doctorId", width: 10 },
-      { header: "Patient ID", key: "patientId", width: 10 },
-      { header: "Created At", key: "createdAt", width: 25 },
-      { header: "Updated At", key: "updatedAt", width: 25 },
+      { header: "Patient Name", key: "patientName", width: 30 },
+      { header: "Appointment Date", key: "appointmentDate", width: 25 },
+      { header: "Appointment Time", key: "appointmentTime", width: 20 },
     ];
 
-    // Add rows
-    appointments.forEach((appointment) => {
-      worksheet.addRow({
-        id: appointment.id,
-        doctorId: appointment.doctorId,
-        patientId: appointment.patientId,
-        createdAt: new Date(appointment.createdAt).toLocaleString(),
-        updatedAt: new Date(appointment.updatedAt).toLocaleString(),
-      });
-    });
+    // ** Step 3: Add Data to Worksheet **
+    worksheet.addRows(formattedData);
 
-    // Ensure the workbook is fully written before sending
-    await workbook.xlsx.writeFile(file);
+    // ** Step 4: Save Excel File **
+    const filePath = path.join(__dirname, "../../public");
+    if (!fs.existsSync(filePath)) fs.mkdirSync(filePath, { recursive: true });
 
-    // Stream the file to the response
-    res.sendFile(file, (err) => {
+    const fileName = `appointments.xlsx`;
+    const fileFullPath = path.join(filePath, fileName);
+
+    await workbook.xlsx.writeFile(fileFullPath);
+
+    // ** Step 5: Send File to User **
+    res.download(fileFullPath, fileName, (err) => {
       if (err) {
         console.error("Error sending file:", err);
         return res.status(500).json({ message: "Error sending file" });
       }
-      // Delete file after sending
-      fs.unlinkSync(file);
+
+      // ** Step 6: Delete File After Sending **
+      fs.unlinkSync(fileFullPath);
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

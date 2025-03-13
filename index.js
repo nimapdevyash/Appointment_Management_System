@@ -5,7 +5,7 @@ const { config } = require("dotenv");
 config();
 
 connectToDB();
-sequelize.sync({ force: true });
+sequelize.sync();
 
 const port = process.env.PORT;
 app.listen(port, () =>

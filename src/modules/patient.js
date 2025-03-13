@@ -15,6 +15,10 @@ const Patient = sequelize.define("Patient", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = Patient;

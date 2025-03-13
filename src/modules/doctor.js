@@ -11,6 +11,10 @@ const Doctor = sequelize.define("Doctor", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = Doctor;

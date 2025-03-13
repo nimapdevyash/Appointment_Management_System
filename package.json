@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/nimapdevyash/Appointment_Management_System#readme",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "exceljs": "^4.4.0",
     "express": "^4.21.2",
+    "nodemailer": "^6.10.0",
     "pg": "^8.13.3",
     "sequelize": "^6.37.6"
   }

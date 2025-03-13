@@ -3,6 +3,7 @@ const BlockedPatients = require("../modules/blockedPatients");
 const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
+const sendMail = require("../services/mail");
 
 async function getAppointment(req, res) {
   try {
@@ -84,6 +85,18 @@ async function createAppointment(req, res) {
       patientId,
     });
 
+    await sendMail({
+      email: doctor.email,
+      subject: "new Appointment",
+      text: `you have an appointment with patient ${patient.name} who is diagnosed with ${patient.disease}`,
+    });
+
+    await sendMail({
+      email: patient.email,
+      subject: "new Appointment",
+      text: `you have an appointment with doctor ${doctor.name}`,
+    });
+
     return res.status(200).json({
       message: "appointment is added successfully",
       data: appointment,
@@ -117,7 +130,25 @@ async function deleteAppointment(req, res) {
       });
     }
 
+    const patient = await Patient.findByPk(appointment.patientId);
+
+    if (!patient) {
+      throw new Error("patient is not present");
+    }
+
     await appointment.destroy();
+
+    await sendMail({
+      email: doctor.email,
+      subject: "Appointment Cancled",
+      text: `you have cancled an appointment with patient ${patient.name} `,
+    });
+
+    await sendMail({
+      email: patient.email,
+      subject: "Appointment Cancled",
+      text: `your appointment with doctor ${doctor.name} has been cancled`,
+    });
 
     return res.status(200).json({
       message: "appointment deleted successfully",

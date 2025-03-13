@@ -2,9 +2,9 @@ const { Patient } = require("../modules");
 
 async function createPatient(req, res) {
   try {
-    const { name, disease } = req.body;
+    const { name, disease, email } = req.body;
 
-    if (!name || !disease) {
+    if (!name || !disease || !email) {
       return res.status(404).json({
         Message: "all fields are required",
       });
@@ -13,6 +13,7 @@ async function createPatient(req, res) {
     const patient = await Patient.create({
       name,
       disease,
+      email,
     });
 
     if (!patient) {

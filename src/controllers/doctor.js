@@ -2,13 +2,13 @@ const { Doctor } = require("../modules");
 
 async function createDoctor(req, res) {
   try {
-    const name = req.body.name;
+    const { name, email } = req.body;
 
-    if (!name) {
-      return res.status(404).send("name is required");
+    if (!name || !email) {
+      return res.status(404).send(" all credentials are required");
     }
 
-    const doctor = await Doctor.create({ name });
+    const doctor = await Doctor.create({ name, email });
 
     if (!doctor) {
       return res.status(500).json({

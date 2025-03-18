@@ -1,10 +1,34 @@
-# Appointment Management System
+# Appointment Management System 🏥
 
-## features to implement
+## 📌 Features Implemented
 
-[x] 1. Doctor can have many patients appointments
-[x] 2. Doctor can cancle the Patients appointments
-[x] 3. Patient can schedule multiple appointments based on the slot timings available
-[x] 4. Doctor can blacklist the patients and after that the patient can't find the doctor
-[x] 5. Notification needs to be sent to both the patient and doctor every time the appointment is booked or cancled
-[x] 6. Doctor can download the file containing the name , time of the bookings slot of that patient
+- ✅ **Doctor-Patient Appointments:** A doctor can manage multiple patient appointments.  
+- ✅ **Cancel Appointments:** A doctor can cancel a patient's appointment if needed.  
+- ✅ **Multiple Appointments for Patients:** Patients can schedule multiple appointments based on available slot timings.  
+- ✅ **Blacklist Patients:** Doctors can blacklist patients, preventing them from finding and booking appointments with the doctor.  
+- ✅ **Appointment Notifications:** Both the patient and doctor receive notifications whenever an appointment is booked or canceled.  
+- ✅ **Download Appointment Records:** Doctors can download a file containing patient names and their booking slot timings.  
+
+## 📖 How It Works
+1. **Doctor Management:** Doctors can create, view, and manage their appointments.  
+2. **Patient Scheduling:** Patients can book and manage appointments based on available slots.  
+3. **Notifications:** Automated notifications for appointment confirmations and cancellations.  
+4. **Blacklist Functionality:** Doctors can restrict specific patients from booking further appointments.  
+5. **Report Generation:** Doctors can export a report of their scheduled appointments.  
+
+## 🚀 Getting Started
+### Prerequisites
+- Node.js installed
+- Database setup (MongoDB/PostgreSQL)
+- RabbitMQ for notifications
+
+### Running the Project
+```sh
+# Install dependencies
+npm install
+
+# Start the server
+npm start
+```
+
+
